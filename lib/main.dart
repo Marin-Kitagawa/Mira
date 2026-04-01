@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'screens/game_screen.dart';
 
 void main() {
@@ -34,6 +35,9 @@ class MiraApp extends StatelessWidget {
         ),
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFF080010),
+        textTheme: GoogleFonts.nunitoTextTheme(
+          ThemeData(brightness: Brightness.dark).textTheme,
+        ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
           elevation: 0,

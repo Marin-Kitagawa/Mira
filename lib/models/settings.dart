@@ -27,6 +27,10 @@ class GameSettings {
   final int base;          // display base for integer/fraction values
   final int denominatorMax;
 
+  // Real-specific
+  final int realDecimalPlaces;    // 1–15
+  final bool includeNamedConstants; // mix in π, e, φ, etc.
+
   // Coefficient settings (for complex / quaternion / octonion)
   final CoefficientType coefficientType;
   final int coeffMin;
@@ -45,6 +49,8 @@ class GameSettings {
     this.randomMax = 20,
     this.base = 10,
     this.denominatorMax = 9,
+    this.realDecimalPlaces = 2,
+    this.includeNamedConstants = false,
     this.coefficientType = CoefficientType.randomInteger,
     this.coeffMin = -5,
     this.coeffMax = 5,
@@ -60,6 +66,8 @@ class GameSettings {
     int? randomMax,
     int? base,
     int? denominatorMax,
+    int? realDecimalPlaces,
+    bool? includeNamedConstants,
     CoefficientType? coefficientType,
     int? coeffMin,
     int? coeffMax,
@@ -74,6 +82,8 @@ class GameSettings {
       randomMax: randomMax ?? this.randomMax,
       base: base ?? this.base,
       denominatorMax: denominatorMax ?? this.denominatorMax,
+      realDecimalPlaces: realDecimalPlaces ?? this.realDecimalPlaces,
+      includeNamedConstants: includeNamedConstants ?? this.includeNamedConstants,
       coefficientType: coefficientType ?? this.coefficientType,
       coeffMin: coeffMin ?? this.coeffMin,
       coeffMax: coeffMax ?? this.coeffMax,
@@ -91,6 +101,8 @@ class GameSettings {
     await prefs.setInt('randomMax', randomMax);
     await prefs.setInt('base', base);
     await prefs.setInt('denominatorMax', denominatorMax);
+    await prefs.setInt('realDecimalPlaces', realDecimalPlaces);
+    await prefs.setBool('includeNamedConstants', includeNamedConstants);
     await prefs.setInt('coefficientType', coefficientType.index);
     await prefs.setInt('coeffMin', coeffMin);
     await prefs.setInt('coeffMax', coeffMax);
@@ -112,6 +124,8 @@ class GameSettings {
       randomMax: prefs.getInt('randomMax') ?? 20,
       base: prefs.getInt('base') ?? 10,
       denominatorMax: prefs.getInt('denominatorMax') ?? 9,
+      realDecimalPlaces: (prefs.getInt('realDecimalPlaces') ?? 2).clamp(1, 15),
+      includeNamedConstants: prefs.getBool('includeNamedConstants') ?? false,
       coefficientType: CoefficientType.values[ctIdx],
       coeffMin: prefs.getInt('coeffMin') ?? -5,
       coeffMax: prefs.getInt('coeffMax') ?? 5,

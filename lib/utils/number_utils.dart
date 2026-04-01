@@ -117,7 +117,8 @@ List<GameNumber> generateNumbers(
     case NumberType.fraction:
       return _fractions(n, s.randomMin, s.randomMax, s.denominatorMax, s.base, rng);
     case NumberType.real:
-      return _reals(n, s.randomMin.toDouble(), s.randomMax.toDouble(), rng);
+      return _reals(n, s.randomMin.toDouble(), s.randomMax.toDouble(),
+          s.realDecimalPlaces, s.includeNamedConstants, rng);
     case NumberType.complex:
       return _complex(n, s, rng);
     case NumberType.quaternion:
@@ -179,15 +180,27 @@ List<GameNumber> _fractions(
   return results;
 }
 
-List<GameNumber> _reals(int n, double min, double max, Random rng) {
+List<GameNumber> _reals(
+  int n, double min, double max, int decimalPlaces, bool includeConstants, Random rng) {
   if (min >= max) { min -= n; max += n; }
   final results = <GameNumber>[];
   final seen = <String>{};
+
+  if (includeConstants) {
+    final pool = List.of(kNamedConstants)..shuffle(rng);
+    for (final c in pool) {
+      if (results.length >= n) break;
+      if (seen.contains(c.symbol)) continue;
+      seen.add(c.symbol);
+      results.add(GameNumber(display: c.symbol, sortKey: c.value));
+    }
+  }
+
   int attempts = 0;
   while (results.length < n && attempts < 2000) {
     attempts++;
     final v = min + rng.nextDouble() * (max - min);
-    final disp = v.toStringAsFixed(2);
+    final disp = v.toStringAsFixed(decimalPlaces);
     if (seen.contains(disp)) continue;
     seen.add(disp);
     results.add(GameNumber(display: disp, sortKey: v));
@@ -270,6 +283,36 @@ List<GameNumber> _octonions(int n, GameSettings s, Random rng) {
   }
   return results;
 }
+
+// ── Named mathematical constants ─────────────────────────────────────────────
+
+const List<({String symbol, double value})> kNamedConstants = [
+  (symbol: 'π',     value: 3.141592653589793),   // pi
+  (symbol: 'e',     value: 2.718281828459045),   // Euler's number
+  (symbol: 'φ',     value: 1.6180339887498948),  // golden ratio
+  (symbol: 'τ',     value: 6.283185307179586),   // 2π
+  (symbol: '√2',    value: 1.4142135623730951),
+  (symbol: '√3',    value: 1.7320508075688772),
+  (symbol: '√5',    value: 2.23606797749979),
+  (symbol: '∛2',    value: 1.2599210498948732),
+  (symbol: 'γ',     value: 0.5772156649015329),  // Euler–Mascheroni
+  (symbol: 'G',     value: 0.9159655941772190),  // Catalan's constant
+  (symbol: 'Ω',     value: 0.5671432904097838),  // omega constant
+  (symbol: 'δ',     value: 4.6692016091029906),  // Feigenbaum δ
+  (symbol: 'α',     value: 2.5029078750958926),  // Feigenbaum α
+  (symbol: 'ζ(2)',  value: 1.6449340668482264),  // π²/6
+  (symbol: 'ζ(3)',  value: 1.2020569031595942),  // Apéry's constant
+  (symbol: 'ln 2',  value: 0.6931471805599453),
+  (symbol: 'ln 3',  value: 1.0986122886681098),
+  (symbol: '1/φ',   value: 0.6180339887498949),  // 1/golden ratio
+  (symbol: 'π/2',   value: 1.5707963267948966),
+  (symbol: 'π/4',   value: 0.7853981633974483),
+  (symbol: 'e⁻¹',   value: 0.36787944117144233),
+  (symbol: '√π',    value: 1.7724538509055159),
+  (symbol: 'π²',    value: 9.869604401089358),
+  (symbol: 'e²',    value: 7.38905609893065),
+  (symbol: '²√e',   value: 1.6487212707001282),  // √e
+];
 
 // ── Base name map ─────────────────────────────────────────────────────────────
 

@@ -195,6 +195,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return [
           _section('RANGE'),
           _card(_rangeRow(_minCtrl, _maxCtrl, signed: true)),
+          const SizedBox(height: 10),
+          _section('DECIMAL PLACES'),
+          _card(_decimalPlacesSlider()),
+          const SizedBox(height: 10),
+          _section('NAMED CONSTANTS'),
+          _card(_namedConstantsRow()),
         ];
 
       case NumberType.complex:
@@ -202,6 +208,59 @@ class _SettingsScreenState extends State<SettingsScreen> {
       case NumberType.octonion:
         return _hyperComplexSettings();
     }
+  }
+
+  Widget _decimalPlacesSlider() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Decimal places', style: _kLabel),
+            _badge('${_s.realDecimalPlaces}'),
+          ],
+        ),
+        Slider(
+          value: _s.realDecimalPlaces.toDouble(),
+          min: 1, max: 15, divisions: 14,
+          activeColor: const Color(0xFFFF6B9D),
+          inactiveColor: const Color(0xFF4A1060),
+          onChanged: (v) =>
+              setState(() => _s = _s.copyWith(realDecimalPlaces: v.round())),
+        ),
+      ],
+    );
+  }
+
+  Widget _namedConstantsRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Include named constants', style: _kLabel),
+              Text(
+                'Mix in π, e, φ, δ, γ, √2, ζ(3)…',
+                style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.4), fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        Switch(
+          value: _s.includeNamedConstants,
+          activeThumbColor: const Color(0xFFFF6B9D),
+          activeTrackColor: const Color(0xFF4A1060),
+          inactiveThumbColor: Colors.grey.shade600,
+          inactiveTrackColor: Colors.grey.shade900,
+          onChanged: (v) =>
+              setState(() => _s = _s.copyWith(includeNamedConstants: v)),
+        ),
+      ],
+    );
   }
 
   List<Widget> _hyperComplexSettings() {

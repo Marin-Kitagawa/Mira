@@ -57,10 +57,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  assets:
-    - assets/fonts/
-
-  fonts:
-    - family: AsanaMath
-      fonts:
-        - asset: assets/fonts/Asana-Math.otf
+  # Uncomment once assets/fonts/Asana-Math.otf is present:
+  # assets:
+  #   - assets/fonts/
+  # fonts:
+  #   - family: AsanaMath
+  #     fonts:
+  #       - asset: assets/fonts/Asana-Math.otf

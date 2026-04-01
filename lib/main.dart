@@ -35,7 +35,7 @@ class MiraApp extends StatelessWidget {
         ),
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFF080010),
-        textTheme: GoogleFonts.nunitoTextTheme(
+        textTheme: GoogleFonts.cormorantGaramondTextTheme(
           ThemeData(brightness: Brightness.dark).textTheme,
         ),
         appBarTheme: const AppBarTheme(

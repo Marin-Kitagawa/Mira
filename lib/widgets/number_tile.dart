@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // 12 feminine gradient pairs (pink → purple spectrum)
 const List<List<Color>> kFeminineGradients = [
@@ -123,7 +122,8 @@ class NumberTile extends StatelessWidget {
                     child: Text(
                       label,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.nunito(
+                      style: TextStyle(
+                        fontFamily: 'AsanaMath',
                         color: tapped ? Colors.grey.shade500 : Colors.white,
                         fontSize: fontSize,
                         fontWeight: FontWeight.w700,

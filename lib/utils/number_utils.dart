@@ -46,6 +46,7 @@ _C _genCoeff(
   int denomMax,
   int base,
   int numberCount,
+  int decimalPlaces,
   Random rng,
 ) {
   // Safeguard: ensure range is valid
@@ -93,7 +94,7 @@ _C _genCoeff(
         v = min + rng.nextDouble() * (max - min);
         attempts++;
       } while (v.abs() < 0.05 && attempts < 50);
-      return (value: v, display: v.toStringAsFixed(2));
+      return (value: v, display: v.toStringAsFixed(decimalPlaces));
   }
 }
 
@@ -216,8 +217,8 @@ List<GameNumber> _complex(int n, GameSettings s, Random rng) {
   int attempts = 0;
   while (results.length < n && attempts < 2000) {
     attempts++;
-    final a = _genCoeff(s.coefficientType, s.coeffMin, s.coeffMax, s.coeffDenomMax, s.base, s.numberCount, rng);
-    final b = _genCoeff(s.coefficientType, s.coeffMin, s.coeffMax, s.coeffDenomMax, s.base, s.numberCount, rng);
+    final a = _genCoeff(s.coefficientType, s.coeffMin, s.coeffMax, s.coeffDenomMax, s.base, s.numberCount, s.realDecimalPlaces, rng);
+    final b = _genCoeff(s.coefficientType, s.coeffMin, s.coeffMax, s.coeffDenomMax, s.base, s.numberCount, s.realDecimalPlaces, rng);
     final mag = sqrt(a.value * a.value + b.value * b.value);
     final key = (mag * 10000).roundToDouble();
     if (seen.contains(key)) continue;
@@ -238,7 +239,7 @@ List<GameNumber> _quaternions(int n, GameSettings s, Random rng) {
   while (results.length < n && attempts < 2000) {
     attempts++;
     final c = List.generate(4, (_) =>
-        _genCoeff(s.coefficientType, s.coeffMin, s.coeffMax, s.coeffDenomMax, s.base, s.numberCount, rng));
+        _genCoeff(s.coefficientType, s.coeffMin, s.coeffMax, s.coeffDenomMax, s.base, s.numberCount, s.realDecimalPlaces, rng));
     final mag = sqrt(c.fold(0.0, (sum, x) => sum + x.value * x.value));
     final key = (mag * 10000).roundToDouble();
     if (seen.contains(key)) continue;
@@ -261,7 +262,7 @@ List<GameNumber> _octonions(int n, GameSettings s, Random rng) {
   while (results.length < n && attempts < 2000) {
     attempts++;
     final c = List.generate(8, (_) =>
-        _genCoeff(s.coefficientType, s.coeffMin, s.coeffMax, s.coeffDenomMax, s.base, s.numberCount, rng));
+        _genCoeff(s.coefficientType, s.coeffMin, s.coeffMax, s.coeffDenomMax, s.base, s.numberCount, s.realDecimalPlaces, rng));
     final mag = sqrt(c.fold(0.0, (sum, x) => sum + x.value * x.value));
     final key = (mag * 10000).roundToDouble();
     if (seen.contains(key)) continue;

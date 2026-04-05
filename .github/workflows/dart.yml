@@ -25,7 +25,7 @@ jobs:
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
       - name: Install Flutter
-        run: sudo snap install flutter && sudo snap alias flutter.dart dart
+        run: sudo snap install flutter --classic && sudo snap alias flutter.dart dart
 
       - name: Install dependencies
         run: flutter pub get
